@@ -1,0 +1,100 @@
+# copycat-trader configuration
+# -----------------------------------------------------------------------------
+# ALL sensitive values (keypair path, Jito auth, Jupiter API key) should be
+# loaded from env vars in production. This file is read at startup and
+# hot-reloaded on SIGHUP (Unix) / on file change (Windows).
+
+[rpc]
+# Standard Solana RPC — used for quotes, account reads, tx submission fallback.
+http_url      = "https://your-rpc.example.com"
+ws_url        = "wss://your-rpc.example.com"
+commitment    = "processed"   # processed | confirmed | finalized
+
+[geyser]
+# Yellowstone gRPC endpoint — this is the hot path. Colocate in the same DC
+# as the Solana validator for <5 ms frame latency (ams3/fra1/nyc3 for Helius,
+# Frankfurt/NY for Triton, etc.).
+endpoint      = "https://grpc.your-provider.example.com:443"
+x_token       = "${GEYSER_X_TOKEN}"          # provider auth header
+reconnect_ms  = 1500
+ping_ms       = 10_000
+
+[executor]
+# Signer used for copy trades. MUST be funded with SOL.
+keypair_path  = "${COPYCAT_KEYPAIR_PATH}"
+# Jupiter swap API (self-hosted endpoint preferred for latency).
+jupiter_url   = "https://quote-api.jup.ag/v6"
+jupiter_api_key = "${JUPITER_API_KEY}"       # optional; empty => public tier
+
+# Jito block-engine for bundle submission. Required for landing trades with
+# high priority on congested blocks.
+jito_block_engine = "https://mainnet.block-engine.jito.wtf"
+jito_tip_lamports = 100_000                  # 0.0001 SOL per bundle
+jito_uuid         = "${JITO_UUID}"           # optional
+
+default_slippage_bps = 150                   # 1.5%
+priority_fee_microlamports = 500_000         # ~0.0005 SOL per tx
+compute_unit_limit         = 600_000
+
+[risk]
+# Rug/honeypot screening — every candidate buy is simulated through these
+# checks before submission.
+simulate_sell_before_buy   = true     # quote buy, then quote sell; reject if impact > max
+max_roundtrip_impact_bps   = 2_000    # 20%
+require_mint_authority_null = true    # no mintAuthority on the SPL mint
+require_freeze_authority_null = true
+blocked_programs = [
+    # add any program IDs you never want to interact with
+]
+
+[db]
+url = "sqlite://copycat.db"
+busy_timeout_ms = 5_000
+
+[tui]
+enabled       = true
+refresh_hz    = 10
+
+# -----------------------------------------------------------------------------
+# Target wallets. Add one [[wallets]] block per wallet you want to mirror.
+# -----------------------------------------------------------------------------
+
+[[wallets]]
+name          = "alpha-wallet-1"
+address       = "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU"
+enabled       = true
+
+# sizing: one of "fixed_sol", "fixed_usd", "pct_of_target"
+sizing_mode   = "pct_of_target"
+sizing_value  = 10.0                # 10% of target trade size
+max_position_usd = 500.0            # cap per position
+min_target_trade_usd = 100.0        # ignore target trades smaller than this
+
+cooldown_ms   = 1500                # min time between two copy trades from this wallet
+max_slippage_bps = 200              # override global slippage
+
+# exit strategy: "mirror" | "tp_sl" | "mirror_then_tp_sl"
+exit_strategy = "mirror_then_tp_sl"
+take_profit_pct = 50.0              # +50%
+stop_loss_pct   = 20.0              # -20%
+
+# per-wallet block list (in addition to global)
+blocked_tokens = [
+    "So11111111111111111111111111111111111111112",  # never "buy" wrapped SOL
+]
+
+[[wallets]]
+name          = "alpha-wallet-2"
+address       = "3NqgPjsuJbgLmChzMZB6s2htKiqFgoKi3oChqJ8cMQVR"
+enabled       = false
+
+sizing_mode   = "fixed_sol"
+sizing_value  = 0.25
+max_position_usd = 200.0
+min_target_trade_usd = 50.0
+cooldown_ms   = 3000
+max_slippage_bps = 300
+exit_strategy = "mirror"
+take_profit_pct = 0.0
+stop_loss_pct   = 0.0
+blocked_tokens = []

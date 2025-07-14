@@ -1,0 +1,9 @@
+/target
+/copycat.db
+/copycat.db-wal
+/copycat.db-shm
+/*.log
+.env
+.env.*
+!/.env.example
+/keys/

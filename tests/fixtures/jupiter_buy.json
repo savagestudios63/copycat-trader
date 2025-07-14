@@ -1,0 +1,32 @@
+{
+  "signature": "5xJupBuySig000000000000000000000000000000000000000000000000000000000000000000000",
+  "slot": 300111,
+  "signer": "Tr4d3rW4ll3tJupBuy111111111111111111111111",
+  "account_keys": [
+    "Tr4d3rW4ll3tJupBuy111111111111111111111111",
+    "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
+    "So11111111111111111111111111111111111111112",
+    "Tok3nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "UserTokAtaYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
+  ],
+  "instructions": [
+    {
+      "program_id": "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
+      "data_b64":   "AAAAAAAAAAA=",
+      "accounts":   [0, 2, 3, 4],
+      "is_inner":   false
+    }
+  ],
+  "pre_token_balances":  [],
+  "post_token_balances": [
+    {
+      "account_index": 4,
+      "mint": "Tok3nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+      "owner": "Tr4d3rW4ll3tJupBuy111111111111111111111111",
+      "amount": "500",
+      "decimals": 6
+    }
+  ],
+  "pre_sol":  [1000000000, 0, 0, 0, 0],
+  "post_sol": [ 100000000, 0, 0, 0, 0]
+}

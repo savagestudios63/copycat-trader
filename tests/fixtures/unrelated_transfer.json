@@ -1,0 +1,22 @@
+{
+  "signature": "5xSysTxSig00000000000000000000000000000000000000000000000000000000000000000000",
+  "slot": 300444,
+  "signer": "Tr4d3rW4ll3tSysTx11111111111111111111111",
+  "account_keys": [
+    "Tr4d3rW4ll3tSysTx11111111111111111111111",
+    "Rec1p1ent1111111111111111111111111111111",
+    "11111111111111111111111111111111"
+  ],
+  "instructions": [
+    {
+      "program_id": "11111111111111111111111111111111",
+      "data_b64":   "AgAAAGQAAAAAAAAA",
+      "accounts":   [0, 1],
+      "is_inner":   false
+    }
+  ],
+  "pre_token_balances":  [],
+  "post_token_balances": [],
+  "pre_sol":  [1000000000, 0, 0],
+  "post_sol": [ 999995000, 5000, 0]
+}
